@@ -1,6 +1,6 @@
 import { useRef, useEffect } from "react"
 import { Rnd } from "react-rnd"
-import { LAYOUT_TYPES, isLayoutType } from "@/components/types"
+import { isLayoutType } from "@/components/types"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
@@ -8,8 +8,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Combobox } from "@/components/ui/combobox"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { Upload, Plus, Download, X, List, PanelRight, ZoomIn, ZoomOut, RotateCcw, Copy } from "lucide-react"
+import { Upload, Plus, Download, X, List, PanelRight, ZoomIn, ZoomOut, RotateCcw, Copy, Languages } from "lucide-react"
 import { EditorProvider, useEditorContext } from "@/contexts/editor-context"
+import { LanguageProvider, useLanguage, LAYOUT_TYPES_I18N } from "@/contexts/language-context"
 import { useAnnotations } from "@/hooks/use-annotations"
 import { useImage } from "@/hooks/use-image"
 import { useCanvas } from "@/hooks/use-canvas"
@@ -28,6 +29,9 @@ const ANNOTATION_COLORS = [
 ]
 
 function EditorContent() {
+  const { language, setLanguage, t } = useLanguage()
+  const layoutTypes = LAYOUT_TYPES_I18N[language]
+
   const {
     project,
     componentKinds,
@@ -87,15 +91,23 @@ function EditorContent() {
     addAnnotation(0.1, 0.1, 0.2, 0.2)
   }
 
+  const toggleLanguage = () => {
+    setLanguage(language === "en" ? "ja" : "en")
+  }
+
   return (
     <div className="flex h-screen flex-col bg-background">
       {/* Header */}
       <header className="flex h-14 shrink-0 items-center justify-between border-b px-4">
-        <h1 className="text-lg font-semibold">画像注釈エディター</h1>
+        <h1 className="text-lg font-semibold">{t.appTitle}</h1>
         <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" onClick={toggleLanguage}>
+            <Languages className="mr-1 h-4 w-4" />
+            {language === "en" ? "日本語" : "English"}
+          </Button>
           <Button variant="default" onClick={handleExport} disabled={project.annotations.length === 0}>
             <Download className="mr-2 h-4 w-4" />
-            エクスポート
+            {t.export}
           </Button>
         </div>
       </header>
@@ -111,17 +123,19 @@ function EditorContent() {
             <div className="flex items-center gap-2 border-b bg-muted/30 p-2">
               <Button variant="outline" size="sm" onClick={handleAddRect}>
                 <Plus className="mr-1 h-4 w-4" />
-                矩形を追加
+                {t.addRectangle}
               </Button>
 
               <div className="mx-2 h-6 w-px bg-border" />
 
-              <span className="text-sm text-muted-foreground">プリセット:</span>
+              <span className="text-sm text-muted-foreground">{t.preset}:</span>
               <Combobox
                 options={componentKinds}
                 value={defaultComponentKind}
                 onValueChange={setDefaultComponentKind}
-                placeholder="コンポーネント"
+                placeholder={t.component}
+                searchPlaceholder={t.searchPlaceholder}
+                emptyText={t.noComponentFound}
                 className="w-40"
               />
 
@@ -158,7 +172,7 @@ function EditorContent() {
                 onClick={() => setShowAnnotationList(!showAnnotationList)}
               >
                 <List className="mr-1 h-4 w-4" />
-                注釈一覧
+                {t.annotations}
               </Button>
               <Button
                 variant={showInspector ? "secondary" : "outline"}
@@ -166,7 +180,7 @@ function EditorContent() {
                 onClick={() => setShowInspector(!showInspector)}
               >
                 <PanelRight className="mr-1 h-4 w-4" />
-                インスペクター
+                {t.inspector}
               </Button>
             </div>
           )}
@@ -182,12 +196,12 @@ function EditorContent() {
               >
                 <div className="rounded-lg border-2 border-dashed border-muted-foreground/25 p-12 text-center transition-colors hover:border-muted-foreground/50">
                   <Upload className="mx-auto mb-4 h-12 w-12 text-muted-foreground/50" />
-                  <p className="mb-2 text-lg font-medium">画像をアップロードして開始</p>
-                  <p className="text-sm text-muted-foreground">クリックまたはドラッグ&ドロップ</p>
+                  <p className="mb-2 text-lg font-medium">{t.uploadTitle}</p>
+                  <p className="text-sm text-muted-foreground">{t.uploadHint}</p>
                 </div>
                 <Button variant="outline" onClick={() => imageFileInputRef.current?.click()}>
                   <Upload className="mr-2 h-4 w-4" />
-                  画像を選択
+                  {t.selectImage}
                 </Button>
               </div>
             ) : (
@@ -323,7 +337,7 @@ function EditorContent() {
           {showAnnotationList && project.imageDataUrl && (
             <div className="absolute left-4 top-16 z-10 w-64 max-h-[calc(100vh-10rem)] overflow-auto rounded-lg border bg-background shadow-lg">
               <div className="flex items-center justify-between border-b p-3">
-                <h3 className="font-medium">注釈一覧 ({project.annotations.length})</h3>
+                <h3 className="font-medium">{t.annotations} ({project.annotations.length})</h3>
                 <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => setShowAnnotationList(false)}>
                   <X className="h-4 w-4" />
                 </Button>
@@ -350,7 +364,7 @@ function EditorContent() {
                   </button>
                 ))}
                 {project.annotations.length === 0 && (
-                  <p className="py-4 text-center text-sm text-muted-foreground">注釈がありません</p>
+                  <p className="py-4 text-center text-sm text-muted-foreground">{t.noAnnotations}</p>
                 )}
               </div>
             </div>
@@ -368,7 +382,7 @@ function EditorContent() {
                     </div>
 
                     <div>
-                      <Label className="mb-1 block">レイアウトタイプ</Label>
+                      <Label className="mb-1 block">{t.layoutType}</Label>
                       <Select
                         value={selectedAnnotation.layoutType || "none"}
                         onValueChange={(value) => updateAnnotationField(selectedAnnotation.id, "layoutType", value)}
@@ -377,7 +391,7 @@ function EditorContent() {
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          {LAYOUT_TYPES.map((type) => (
+                          {layoutTypes.map((type) => (
                             <SelectItem key={type.value} value={type.value}>
                               {type.label}
                             </SelectItem>
@@ -387,61 +401,63 @@ function EditorContent() {
                     </div>
 
                     <div>
-                      <Label className="mb-1 block">コンポーネント種類</Label>
+                      <Label className="mb-1 block">{t.componentType}</Label>
                       {isLayoutType(selectedAnnotation.layoutType) ? (
                         <div className="rounded-md border bg-muted px-3 py-2 text-sm text-muted-foreground">
-                          Box (レイアウトコンテナ)
+                          {t.layoutContainer}
                         </div>
                       ) : (
                         <Combobox
                           options={componentKinds}
                           value={selectedAnnotation.componentKind}
                           onValueChange={(value) => updateComponentKind(selectedAnnotation.id, value)}
-                          placeholder="コンポーネントを選択"
+                          placeholder={t.selectComponent}
+                          searchPlaceholder={t.searchPlaceholder}
+                          emptyText={t.noComponentFound}
                         />
                       )}
                     </div>
 
                     <div>
-                      <Label className="mb-1 block">モーション・動作情報</Label>
+                      <Label className="mb-1 block">{t.motionInfo}</Label>
                       <Textarea
                         value={selectedAnnotation.motionInfo}
                         onChange={(e) => updateAnnotationField(selectedAnnotation.id, "motionInfo", e.target.value)}
-                        placeholder="例: ホバー時に拡大、クリックでモーダルを開く..."
+                        placeholder={t.motionPlaceholder}
                         rows={3}
                       />
                     </div>
 
                     <div className="grid grid-cols-2 gap-2">
                       <div>
-                        <Label className="text-xs text-muted-foreground">X位置</Label>
+                        <Label className="text-xs text-muted-foreground">{t.xPosition}</Label>
                         <p className="text-sm">{(selectedAnnotation.x * 100).toFixed(1)}%</p>
                       </div>
                       <div>
-                        <Label className="text-xs text-muted-foreground">Y位置</Label>
+                        <Label className="text-xs text-muted-foreground">{t.yPosition}</Label>
                         <p className="text-sm">{(selectedAnnotation.y * 100).toFixed(1)}%</p>
                       </div>
                       <div>
-                        <Label className="text-xs text-muted-foreground">幅</Label>
+                        <Label className="text-xs text-muted-foreground">{t.width}</Label>
                         <p className="text-sm">{(selectedAnnotation.w * 100).toFixed(1)}%</p>
                       </div>
                       <div>
-                        <Label className="text-xs text-muted-foreground">高さ</Label>
+                        <Label className="text-xs text-muted-foreground">{t.height}</Label>
                         <p className="text-sm">{(selectedAnnotation.h * 100).toFixed(1)}%</p>
                       </div>
                     </div>
 
                     <div>
-                      <Label className="mb-2 block">親要素</Label>
+                      <Label className="mb-2 block">{t.parentElement}</Label>
                       <Select
                         value={selectedAnnotation.parentId || "none"}
                         onValueChange={(value) => setParent(selectedAnnotation.id, value === "none" ? null : value)}
                       >
                         <SelectTrigger>
-                          <SelectValue placeholder="なし" />
+                          <SelectValue placeholder={t.none} />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="none">なし</SelectItem>
+                          <SelectItem value="none">{t.none}</SelectItem>
                           {project.annotations
                             .filter((a) => a.id !== selectedAnnotation.id && isLayoutType(a.layoutType))
                             .map((a) => (
@@ -457,7 +473,7 @@ function EditorContent() {
                     </div>
 
                     <div>
-                      <Label className="mb-2 block">枠線の色</Label>
+                      <Label className="mb-2 block">{t.borderColor}</Label>
                       <div className="flex flex-wrap gap-2">
                         {ANNOTATION_COLORS.map((color) => (
                           <button
@@ -476,10 +492,10 @@ function EditorContent() {
                     {/* Flex and Grid Property UI */}
                     {selectedAnnotation.layoutType === "flex" && (
                       <div className="space-y-3 rounded-md border p-3">
-                        <div className="text-sm font-semibold">Flexboxプロパティ</div>
+                        <div className="text-sm font-semibold">{t.flexboxProperties}</div>
 
                         <div>
-                          <label className="text-xs text-muted-foreground">方向</label>
+                          <label className="text-xs text-muted-foreground">{t.direction}</label>
                           <Select
                             value={selectedAnnotation.flexLayout?.direction || "row"}
                             onValueChange={(value) => {
@@ -496,14 +512,14 @@ function EditorContent() {
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="row">横 (row)</SelectItem>
-                              <SelectItem value="column">縦 (column)</SelectItem>
+                              <SelectItem value="row">{t.horizontal}</SelectItem>
+                              <SelectItem value="column">{t.vertical}</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
 
                         <div>
-                          <label className="text-xs text-muted-foreground">主軸の配置</label>
+                          <label className="text-xs text-muted-foreground">{t.justifyContent}</label>
                           <Select
                             value={selectedAnnotation.flexLayout?.justify || "start"}
                             onValueChange={(value) => {
@@ -530,7 +546,7 @@ function EditorContent() {
                         </div>
 
                         <div>
-                          <label className="text-xs text-muted-foreground">交差軸の配置</label>
+                          <label className="text-xs text-muted-foreground">{t.alignItems}</label>
                           <Select
                             value={selectedAnnotation.flexLayout?.align || "start"}
                             onValueChange={(value) => {
@@ -556,7 +572,7 @@ function EditorContent() {
                         </div>
 
                         <div>
-                          <label className="text-xs text-muted-foreground">間隔 (gap)</label>
+                          <label className="text-xs text-muted-foreground">{t.gap}</label>
                           <Input
                             type="number"
                             min="0"
@@ -578,10 +594,10 @@ function EditorContent() {
 
                     {selectedAnnotation.layoutType === "grid" && (
                       <div className="space-y-3 rounded-md border p-3">
-                        <div className="text-sm font-semibold">Gridプロパティ</div>
+                        <div className="text-sm font-semibold">{t.gridProperties}</div>
 
                         <div>
-                          <label className="text-xs text-muted-foreground">カラム数</label>
+                          <label className="text-xs text-muted-foreground">{t.columns}</label>
                           <Input
                             type="number"
                             min="1"
@@ -599,7 +615,7 @@ function EditorContent() {
                         </div>
 
                         <div>
-                          <label className="text-xs text-muted-foreground">行数</label>
+                          <label className="text-xs text-muted-foreground">{t.rows}</label>
                           <Input
                             type="number"
                             min="1"
@@ -617,7 +633,7 @@ function EditorContent() {
                         </div>
 
                         <div>
-                          <label className="text-xs text-muted-foreground">間隔 (gap)</label>
+                          <label className="text-xs text-muted-foreground">{t.gap}</label>
                           <Input
                             type="number"
                             min="0"
@@ -643,7 +659,7 @@ function EditorContent() {
                         onClick={() => duplicateAnnotation(selectedAnnotation.id)}
                       >
                         <Copy className="mr-1 h-4 w-4" />
-                        複製
+                        {t.duplicate}
                       </Button>
                       <Button
                         variant="destructive"
@@ -651,12 +667,12 @@ function EditorContent() {
                         onClick={() => deleteAnnotation(selectedAnnotation.id)}
                       >
                         <X className="mr-1 h-4 w-4" />
-                        削除
+                        {t.delete}
                       </Button>
                     </div>
                   </div>
                 ) : (
-                  <div className="p-8 text-center text-sm text-muted-foreground">注釈を選択してください</div>
+                  <div className="p-8 text-center text-sm text-muted-foreground">{t.selectAnnotation}</div>
                 )}
               </Card>
             </div>
@@ -669,8 +685,10 @@ function EditorContent() {
 
 export default function Editor() {
   return (
-    <EditorProvider>
-      <EditorContent />
-    </EditorProvider>
+    <LanguageProvider>
+      <EditorProvider>
+        <EditorContent />
+      </EditorProvider>
+    </LanguageProvider>
   )
 }
