@@ -23,6 +23,25 @@ const initialProject: Project = {
   selectedId: null,
 }
 
+// デフォルトの実装要件
+export const DEFAULT_REQUIREMENTS = `1. **コンポーネントの階層**: 上記の注釈の階層構造に基づいて、適切なコンポーネント構造を作成してください。
+2. **レイアウトコンテナ**:
+   - **Box**: 基本的なコンテナ要素。子要素を配置可能ですが、特定のレイアウトロジックは持ちません
+   - **Flex**: Flexboxを使用した柔軟なレイアウト。方向、配置、間隔の指定に従ってください
+   - **Grid**: CSS Gridを使用したグリッドレイアウト。カラム数、行数、間隔の指定に従ってください
+   - 通常のコンポーネント（Button、Input等）は子要素を持ちません
+   - 子要素は必ず親要素の中に配置してください
+3. **アクセシビリティ**: ARIA属性、キーボードナビゲーション、スクリーンリーダー対応を含めてください。
+4. **スタイリング**:
+   - Tailwind CSSを使用してください
+   - レスポンシブデザインに対応してください
+   - 注釈で指定されたモーション効果を実装してください
+   - Flexbox/Gridのプロパティは注釈の詳細設定に基づいて適用してください
+5. **ファイル構造**:
+   - コンポーネントは \`components/\` フォルダに配置してください
+   - ページは \`app/\` フォルダに配置してください
+   - ユーティリティ関数は \`lib/\` フォルダに配置してください`
+
 // Context の型定義
 interface EditorContextType {
   // 状態
@@ -33,6 +52,7 @@ interface EditorContextType {
   showInspector: boolean
   showAnnotationList: boolean
   dragOffsets: Map<string, { x: number; y: number }>
+  customRequirements: string
 
   // 計算プロパティ
   componentKinds: string[]
@@ -47,6 +67,7 @@ interface EditorContextType {
   setShowInspector: React.Dispatch<React.SetStateAction<boolean>>
   setShowAnnotationList: React.Dispatch<React.SetStateAction<boolean>>
   setDragOffsets: React.Dispatch<React.SetStateAction<Map<string, { x: number; y: number }>>>
+  setCustomRequirements: React.Dispatch<React.SetStateAction<string>>
 }
 
 const EditorContext = createContext<EditorContextType | null>(null)
@@ -60,6 +81,7 @@ export function EditorProvider({ children }: { children: ReactNode }) {
   const [showInspector, setShowInspector] = useState(true)
   const [showAnnotationList, setShowAnnotationList] = useState(true)
   const [dragOffsets, setDragOffsets] = useState<Map<string, { x: number; y: number }>>(new Map())
+  const [customRequirements, setCustomRequirements] = useState<string>(DEFAULT_REQUIREMENTS)
 
   // 計算プロパティ
   const componentKinds = componentSets.filter((s) => s.enabled).flatMap((s) => s.components)
@@ -74,6 +96,7 @@ export function EditorProvider({ children }: { children: ReactNode }) {
     showInspector,
     showAnnotationList,
     dragOffsets,
+    customRequirements,
     componentKinds,
     selectedAnnotation,
     rootAnnotations,
@@ -84,6 +107,7 @@ export function EditorProvider({ children }: { children: ReactNode }) {
     setShowInspector,
     setShowAnnotationList,
     setDragOffsets,
+    setCustomRequirements,
   }
 
   return <EditorContext.Provider value={value}>{children}</EditorContext.Provider>

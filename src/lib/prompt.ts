@@ -1,6 +1,6 @@
 import type { Annotation, FlexLayout, GridLayout } from "@/components/types"
 
-export function generatePrompt(annotations: Annotation[], imageName: string): string {
+export function generatePrompt(annotations: Annotation[], imageName: string, customRequirements?: string): string {
   // ルート要素（親を持たない）を取得
   const rootAnnotations = annotations.filter((a) => !a.parentId)
 
@@ -55,21 +55,7 @@ ${indent}- **モーション・動作情報**: ${annotation.motionInfo || "指�
 
   const annotationsList = rootAnnotations.map((annotation, index) => renderAnnotation(annotation, 0, index)).join("\n")
 
-  return `# UI実装リクエスト
-
-## 参照画像
-ファイル名: ${imageName}
-
-## 注釈リスト（階層構造）
-
-以下の注釈は、画像内のUI要素の位置と階層構造を示しています。座標は画像の幅・高さに対する割合（0〜1）で表されます。
-親子関係は、実際のDOM構造やレイアウトコンテナの入れ子を表現しています。
-
-${annotationsList}
-
-## 実装要件
-
-1. **コンポーネントの階層**: 上記の注釈の階層構造に基づいて、適切なコンポーネント構造を作成してください。
+  const requirementsSection = customRequirements || `1. **コンポーネントの階層**: 上記の注釈の階層構造に基づいて、適切なコンポーネント構造を作成してください。
 2. **レイアウトコンテナ**:
    - **Box**: 基本的なコンテナ要素。子要素を配置可能ですが、特定のレイアウトロジックは持ちません
    - **Flex**: Flexboxを使用した柔軟なレイアウト。方向、配置、間隔の指定に従ってください
@@ -85,7 +71,23 @@ ${annotationsList}
 5. **ファイル構造**:
    - コンポーネントは \`components/\` フォルダに配置してください
    - ページは \`app/\` フォルダに配置してください
-   - ユーティリティ関数は \`lib/\` フォルダに配置してください
+   - ユーティリティ関数は \`lib/\` フォルダに配置してください`
+
+  return `# UI実装リクエスト
+
+## 参照画像
+ファイル名: ${imageName}
+
+## 注釈リスト（階層構造）
+
+以下の注釈は、画像内のUI要素の位置と階層構造を示しています。座標は画像の幅・高さに対する割合（0〜1）で表されます。
+親子関係は、実際のDOM構造やレイアウトコンテナの入れ子を表現しています。
+
+${annotationsList}
+
+## 実装要件
+
+${requirementsSection}
 
 ## 注意事項
 
