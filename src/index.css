@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -116,8 +117,15 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    font-feature-settings: "palt" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   body {
     @apply bg-background text-foreground;
+    font-family: "Noto Sans JP", sans-serif;
+  }
+  code, pre, kbd, samp {
+    font-family: monospace;
   }
 }

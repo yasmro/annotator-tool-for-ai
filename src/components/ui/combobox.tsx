@@ -30,7 +30,7 @@ export function Combobox({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button variant="outline" role="combobox" aria-expanded={open} className={cn("justify-between", className)}>
+        <Button variant="outline" role="combobox" aria-expanded={open} className={cn("justify-between font-normal", className)}>
           {value || placeholder}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
