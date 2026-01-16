@@ -12,6 +12,7 @@ export interface ComboboxProps {
   onValueChange?: (value: string) => void
   placeholder?: string
   searchPlaceholder?: string
+  emptyText?: string
   className?: string
 }
 
@@ -19,8 +20,9 @@ export function Combobox({
   options,
   value,
   onValueChange,
-  placeholder = "選択してください...",
-  searchPlaceholder = "検索...",
+  placeholder = "Select...",
+  searchPlaceholder = "Search...",
+  emptyText = "No results found",
   className,
 }: ComboboxProps) {
   const [open, setOpen] = React.useState(false)
@@ -36,7 +38,7 @@ export function Combobox({
       <PopoverContent className="w-[280px] p-0" align="start">
         <Command>
           <CommandInput placeholder={searchPlaceholder} />
-          <CommandEmpty>コンポーネントが見つかりません</CommandEmpty>
+          <CommandEmpty>{emptyText}</CommandEmpty>
           <CommandList>
             <CommandGroup>
               {options.map((option) => (

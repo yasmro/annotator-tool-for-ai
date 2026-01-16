@@ -3,7 +3,7 @@ export type ComponentKind = string
 export type LayoutType = "none" | "box" | "flex" | "grid"
 
 export const LAYOUT_TYPES = [
-  { value: "none", label: "なし" },
+  { value: "none", label: "None" },
   { value: "box", label: "Box" },
   { value: "flex", label: "Flex" },
   { value: "grid", label: "Grid" },
