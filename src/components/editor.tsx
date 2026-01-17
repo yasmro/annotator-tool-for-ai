@@ -126,10 +126,10 @@ function EditorContent() {
   };
 
   return (
-    <div className="flex h-screen flex-col bg-background">
+    <div className="flex h-dvh flex-col bg-background">
       {/* Header */}
       <header className="flex h-14 shrink-0 items-center justify-between border-b px-4">
-        <h1 className="text-lg font-semibold">{t.appTitle}</h1>
+        <h1 className="text-lg font-semibold text-balance">{t.appTitle}</h1>
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" onClick={toggleLanguage}>
             <Languages className="mr-1 h-4 w-4" />
@@ -186,29 +186,32 @@ function EditorContent() {
                 <Button
                   variant="outline"
                   size="icon"
-                  className="h-8 w-8 bg-transparent"
+                  className="size-8 bg-transparent"
                   onClick={() => setZoom((z) => Math.max(0.1, z - 0.1))}
+                  aria-label="Zoom out"
                 >
-                  <ZoomOut className="h-4 w-4" />
+                  <ZoomOut className="size-4" />
                 </Button>
-                <span className="w-12 text-center text-sm">
+                <span className="w-12 text-center text-sm tabular-nums">
                   {Math.round(zoom * 100)}%
                 </span>
                 <Button
                   variant="outline"
                   size="icon"
-                  className="h-8 w-8 bg-transparent"
+                  className="size-8 bg-transparent"
                   onClick={() => setZoom((z) => Math.min(3, z + 0.1))}
+                  aria-label="Zoom in"
                 >
-                  <ZoomIn className="h-4 w-4" />
+                  <ZoomIn className="size-4" />
                 </Button>
                 <Button
                   variant="outline"
                   size="icon"
-                  className="h-8 w-8 bg-transparent"
+                  className="size-8 bg-transparent"
                   onClick={() => setZoom(1)}
+                  aria-label="Reset zoom"
                 >
-                  <RotateCcw className="h-4 w-4" />
+                  <RotateCcw className="size-4" />
                 </Button>
               </div>
 
@@ -247,8 +250,8 @@ function EditorContent() {
               >
                 <div className="rounded-lg border-2 border-dashed border-muted-foreground/25 p-12 text-center transition-colors hover:border-muted-foreground/50">
                   <Upload className="mx-auto mb-4 h-12 w-12 text-muted-foreground/50" />
-                  <p className="mb-2 text-lg font-medium">{t.uploadTitle}</p>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="mb-2 text-lg font-medium text-balance">{t.uploadTitle}</p>
+                  <p className="text-sm text-muted-foreground text-pretty">
                     {t.uploadHint}
                   </p>
                 </div>
@@ -434,18 +437,19 @@ function EditorContent() {
 
           {/* Floating Annotation List */}
           {showAnnotationList && project.imageDataUrl && (
-            <div className="absolute left-4 top-16 z-10 w-64 max-h-[calc(100vh-10rem)] overflow-auto rounded-lg border bg-background shadow-lg">
+            <div className="absolute left-4 top-16 z-10 w-64 max-h-[calc(100dvh-10rem)] overflow-auto rounded-lg border bg-background shadow-lg">
               <div className="flex items-center justify-between border-b p-3">
-                <h3 className="font-medium">
+                <h3 className="font-medium text-balance">
                   {t.annotations} ({project.annotations.length})
                 </h3>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-6 w-6"
+                  className="size-6"
                   onClick={() => setShowAnnotationList(false)}
+                  aria-label="Close"
                 >
-                  <X className="h-4 w-4" />
+                  <X className="size-4" />
                 </Button>
               </div>
               <div className="p-2">
@@ -484,7 +488,7 @@ function EditorContent() {
 
           {/* Floating Inspector */}
           {showInspector && project.imageDataUrl && (
-            <div className="fixed right-4 top-36 z-50 w-80 max-h-[calc(100vh-10rem)] overflow-y-auto">
+            <div className="fixed right-4 top-36 z-50 w-80 max-h-[calc(100dvh-10rem)] overflow-y-auto">
               <Card className="border bg-background shadow-lg">
                 {selectedAnnotation ? (
                   <div className="space-y-4 p-4">
@@ -563,7 +567,7 @@ function EditorContent() {
                         <Label className="text-xs text-muted-foreground">
                           {t.xPosition}
                         </Label>
-                        <p className="text-sm">
+                        <p className="text-sm tabular-nums">
                           {(selectedAnnotation.x * 100).toFixed(1)}%
                         </p>
                       </div>
@@ -571,7 +575,7 @@ function EditorContent() {
                         <Label className="text-xs text-muted-foreground">
                           {t.yPosition}
                         </Label>
-                        <p className="text-sm">
+                        <p className="text-sm tabular-nums">
                           {(selectedAnnotation.y * 100).toFixed(1)}%
                         </p>
                       </div>
@@ -579,7 +583,7 @@ function EditorContent() {
                         <Label className="text-xs text-muted-foreground">
                           {t.width}
                         </Label>
-                        <p className="text-sm">
+                        <p className="text-sm tabular-nums">
                           {(selectedAnnotation.w * 100).toFixed(1)}%
                         </p>
                       </div>
@@ -587,7 +591,7 @@ function EditorContent() {
                         <Label className="text-xs text-muted-foreground">
                           {t.height}
                         </Label>
-                        <p className="text-sm">
+                        <p className="text-sm tabular-nums">
                           {(selectedAnnotation.h * 100).toFixed(1)}%
                         </p>
                       </div>
@@ -638,7 +642,8 @@ function EditorContent() {
                           <button
                             key={color}
                             type="button"
-                            className={`h-6 w-6 rounded border-2 ${
+                            aria-label={`Select color ${color}`}
+                            className={`size-6 rounded border-2 ${
                               selectedAnnotation.color === color
                                 ? "border-foreground"
                                 : "border-transparent"
@@ -916,7 +921,7 @@ function EditorContent() {
                           duplicateAnnotation(selectedAnnotation.id)
                         }
                       >
-                        <Copy className="mr-1 h-4 w-4" />
+                        <Copy className="mr-1 size-4" />
                         {t.duplicate}
                       </Button>
                       <Button
@@ -924,7 +929,7 @@ function EditorContent() {
                         className="flex-1"
                         onClick={() => deleteAnnotation(selectedAnnotation.id)}
                       >
-                        <X className="mr-1 h-4 w-4" />
+                        <X className="mr-1 size-4" />
                         {t.delete}
                       </Button>
                     </div>
