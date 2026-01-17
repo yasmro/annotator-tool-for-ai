@@ -9,6 +9,7 @@ import { Combobox } from "@/components/ui/combobox"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Upload, Plus, Download, X, List, PanelRight, ZoomIn, ZoomOut, RotateCcw, Copy, Languages } from "lucide-react"
+import { CustomPromptDialog } from "@/components/custom-prompt-dialog"
 import { EditorProvider, useEditorContext } from "@/contexts/editor-context"
 import { LanguageProvider, useLanguage, LAYOUT_TYPES_I18N } from "@/contexts/language-context"
 import { useAnnotations } from "@/hooks/use-annotations"
@@ -105,6 +106,7 @@ function EditorContent() {
             <Languages className="mr-1 h-4 w-4" />
             {language === "en" ? "日本語" : "English"}
           </Button>
+          <CustomPromptDialog />
           <Button variant="default" onClick={handleExport} disabled={project.annotations.length === 0}>
             <Download className="mr-2 h-4 w-4" />
             {t.export}

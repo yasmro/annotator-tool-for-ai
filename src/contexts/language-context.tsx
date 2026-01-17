@@ -42,6 +42,13 @@ type TranslationKeys = {
   selectAnnotation: string
   searchPlaceholder: string
   noComponentFound: string
+  // Custom prompt dialog
+  customPromptSettings: string
+  customPromptDescription: string
+  implementationRequirements: string
+  resetToDefault: string
+  save: string
+  cancel: string
 }
 
 const translations: Record<Language, TranslationKeys> = {
@@ -102,6 +109,14 @@ const translations: Record<Language, TranslationKeys> = {
     // Combobox
     searchPlaceholder: "Search...",
     noComponentFound: "No component found",
+
+    // Custom prompt dialog
+    customPromptSettings: "Prompt Settings",
+    customPromptDescription: "Customize the implementation requirements included in the generated prompt.",
+    implementationRequirements: "Implementation Requirements",
+    resetToDefault: "Reset to Default",
+    save: "Save",
+    cancel: "Cancel",
   },
   ja: {
     // Header
@@ -160,6 +175,14 @@ const translations: Record<Language, TranslationKeys> = {
     // Combobox
     searchPlaceholder: "検索...",
     noComponentFound: "コンポーネントが見つかりません",
+
+    // Custom prompt dialog
+    customPromptSettings: "プロンプト設定",
+    customPromptDescription: "生成されるプロンプトに含まれる実装要件をカスタマイズできます。",
+    implementationRequirements: "実装要件",
+    resetToDefault: "デフォルトに戻す",
+    save: "保存",
+    cancel: "キャンセル",
   },
 }
 
