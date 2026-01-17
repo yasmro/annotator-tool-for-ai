@@ -1,8 +1,8 @@
-import { useState } from "react"
-import { Settings } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
-import { Label } from "@/components/ui/label"
+import { useState } from "react";
+import { Settings } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import {
   Dialog,
   DialogContent,
@@ -11,31 +11,34 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { useEditorContext, DEFAULT_REQUIREMENTS } from "@/contexts/editor-context"
-import { useLanguage } from "@/contexts/language-context"
+} from "@/components/ui/dialog";
+import {
+  useEditorContext,
+  DEFAULT_REQUIREMENTS,
+} from "@/contexts/editor-context";
+import { useLanguage } from "@/contexts/language-context";
 
 export function CustomPromptDialog() {
-  const { t } = useLanguage()
-  const { customRequirements, setCustomRequirements } = useEditorContext()
-  const [open, setOpen] = useState(false)
-  const [tempRequirements, setTempRequirements] = useState(customRequirements)
+  const { t } = useLanguage();
+  const { customRequirements, setCustomRequirements } = useEditorContext();
+  const [open, setOpen] = useState(false);
+  const [tempRequirements, setTempRequirements] = useState(customRequirements);
 
   const handleOpen = (isOpen: boolean) => {
     if (isOpen) {
-      setTempRequirements(customRequirements)
+      setTempRequirements(customRequirements);
     }
-    setOpen(isOpen)
-  }
+    setOpen(isOpen);
+  };
 
   const handleSave = () => {
-    setCustomRequirements(tempRequirements)
-    setOpen(false)
-  }
+    setCustomRequirements(tempRequirements);
+    setOpen(false);
+  };
 
   const handleReset = () => {
-    setTempRequirements(DEFAULT_REQUIREMENTS)
-  }
+    setTempRequirements(DEFAULT_REQUIREMENTS);
+  };
 
   return (
     <Dialog open={open} onOpenChange={handleOpen}>
@@ -61,7 +64,7 @@ export function CustomPromptDialog() {
             className="flex-1 resize-none font-mono text-sm"
           />
         </div>
-        <DialogFooter className="flex-shrink-0 gap-2 sm:gap-0">
+        <DialogFooter className="flex-shrink-0 gap-2">
           <Button variant="outline" onClick={handleReset} className="mr-auto">
             {t.resetToDefault}
           </Button>
@@ -72,5 +75,5 @@ export function CustomPromptDialog() {
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
