@@ -28,6 +28,7 @@ import {
   Languages,
 } from "lucide-react";
 import { CustomPromptDialog } from "@/components/custom-prompt-dialog";
+import { ComponentSetDialog } from "@/components/component-set-dialog";
 import { EditorProvider, useEditorContext } from "@/contexts/editor-context";
 import {
   LanguageProvider,
@@ -177,8 +178,11 @@ function EditorContent() {
                 placeholder={t.component}
                 searchPlaceholder={t.searchPlaceholder}
                 emptyText={t.noComponentFound}
+                clearLabel={t.clearSelection}
+                showClearOption
                 className="w-40"
               />
+              <ComponentSetDialog />
 
               <div className="mx-2 h-6 w-px bg-border" />
 
@@ -542,6 +546,8 @@ function EditorContent() {
                           placeholder={t.selectComponent}
                           searchPlaceholder={t.searchPlaceholder}
                           emptyText={t.noComponentFound}
+                          clearLabel={t.clearSelection}
+                          showClearOption
                         />
                       )}
                     </div>
