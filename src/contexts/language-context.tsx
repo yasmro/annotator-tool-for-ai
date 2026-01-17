@@ -49,6 +49,23 @@ type TranslationKeys = {
   resetToDefault: string
   save: string
   cancel: string
+  // Component set dialog
+  componentSetSettings: string
+  componentSetDescription: string
+  components: string
+  newSetName: string
+  newSetPlaceholder: string
+  add: string
+  supportedFormats: string
+  noComponentsFound: string
+  invalidJsonFormat: string
+  clearSelection: string
+  importJson: string
+  componentsImported: string
+  setCreatedWith: string
+  componentSets: string
+  addComponents: string
+  createEmptySet: string
 }
 
 const translations: Record<Language, TranslationKeys> = {
@@ -117,6 +134,24 @@ const translations: Record<Language, TranslationKeys> = {
     resetToDefault: "Reset to Default",
     save: "Save",
     cancel: "Cancel",
+
+    // Component set dialog
+    componentSetSettings: "Component Sets",
+    componentSetDescription: "Manage component sets to use for annotation. Import from Storybook or components.json.",
+    components: "components",
+    newSetName: "New set name",
+    newSetPlaceholder: "Enter set name...",
+    add: "Add",
+    supportedFormats: "Supported formats:",
+    noComponentsFound: "No components found in JSON",
+    invalidJsonFormat: "Invalid JSON format",
+    clearSelection: "Clear selection",
+    importJson: "Import JSON file",
+    componentsImported: "components imported",
+    setCreatedWith: "created with",
+    componentSets: "Component Sets",
+    addComponents: "Add components",
+    createEmptySet: "Or create empty set",
   },
   ja: {
     // Header
@@ -183,6 +218,24 @@ const translations: Record<Language, TranslationKeys> = {
     resetToDefault: "デフォルトに戻す",
     save: "保存",
     cancel: "キャンセル",
+
+    // Component set dialog
+    componentSetSettings: "コンポーネントセット",
+    componentSetDescription: "注釈で使用するコンポーネントセットを管理します。Storybookやcomponents.jsonからインポートできます。",
+    components: "コンポーネント",
+    newSetName: "新しいセット名",
+    newSetPlaceholder: "セット名を入力...",
+    add: "追加",
+    supportedFormats: "対応形式:",
+    noComponentsFound: "JSONにコンポーネントが見つかりません",
+    invalidJsonFormat: "無効なJSON形式です",
+    clearSelection: "選択をクリア",
+    importJson: "JSONファイルをインポート",
+    componentsImported: "件のコンポーネントをインポートしました",
+    setCreatedWith: "を作成しました（",
+    componentSets: "コンポーネントセット",
+    addComponents: "コンポーネントを追加",
+    createEmptySet: "または空のセットを作成",
   },
 }
 
